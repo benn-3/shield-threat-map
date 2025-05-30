@@ -7,7 +7,7 @@ import { fetchNetworkDevices } from '../store/slices/networkSlice';
 import MetricCard from '../components/dashboard/MetricCard';
 import ThreatChart from '../components/dashboard/ThreatChart';
 import ActivityTimeline from '../components/dashboard/ActivityTimeline';
-import { shield, activity, network, flag, zap, alert-triangle } from 'lucide-react';
+import { Shield, Activity, Network, Flag, Zap, AlertTriangle } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
 const Dashboard = () => {
@@ -45,11 +45,11 @@ const Dashboard = () => {
             variant="outline" 
             className="border-red-500 text-red-400 hover:bg-red-500/10"
           >
-            <alert-triangle className="w-4 h-4 mr-2" />
+            <AlertTriangle className="w-4 h-4 mr-2" />
             Emergency Response
           </Button>
           <Button className="bg-red-600 hover:bg-red-700">
-            <shield className="w-4 h-4 mr-2" />
+            <Shield className="w-4 h-4 mr-2" />
             Block Threat
           </Button>
         </div>
@@ -62,28 +62,28 @@ const Dashboard = () => {
           value={threats.length}
           change="+12% from yesterday"
           changeType="negative"
-          icon={<flag className="w-8 h-8" />}
+          icon={<Flag className="w-8 h-8" />}
         />
         <MetricCard
           title="High Severity"
           value={highSeverityThreats}
           change="+5% from yesterday"
           changeType="negative"
-          icon={<alert-triangle className="w-8 h-8" />}
+          icon={<AlertTriangle className="w-8 h-8" />}
         />
         <MetricCard
           title="Network Devices"
           value={devices.length}
           change="No change"
           changeType="neutral"
-          icon={<network className="w-8 h-8" />}
+          icon={<Network className="w-8 h-8" />}
         />
         <MetricCard
           title="Online Status"
           value={`${onlineDevices}/${devices.length}`}
           change="-2 devices offline"
           changeType="negative"
-          icon={<activity className="w-8 h-8" />}
+          icon={<Activity className="w-8 h-8" />}
         />
       </div>
 
