@@ -9,6 +9,11 @@ import { store } from './store';
 import Layout from './components/layout/Layout';
 import Dashboard from './pages/Dashboard';
 import Threats from './pages/Threats';
+import NetworkPage from './pages/Network';
+import SIEMPage from './pages/SIEM';
+import ReportsPage from './pages/Reports';
+import ThreatMapPage from './pages/ThreatMap';
+import SettingsPage from './pages/Settings';
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,11 +29,11 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/threats" element={<Threats />} />
-              <Route path="/network" element={<div className="text-white">Network page coming soon...</div>} />
-              <Route path="/siem" element={<div className="text-white">SIEM page coming soon...</div>} />
-              <Route path="/reports" element={<div className="text-white">Reports page coming soon...</div>} />
-              <Route path="/threat-map" element={<div className="text-white">Threat Map page coming soon...</div>} />
-              <Route path="/settings" element={<div className="text-white">Settings page coming soon...</div>} />
+              <Route path="/network" element={<NetworkPage />} />
+              <Route path="/siem" element={<SIEMPage />} />
+              <Route path="/reports" element={<ReportsPage />} />
+              <Route path="/threat-map" element={<ThreatMapPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
