@@ -5,7 +5,8 @@ export interface NetworkDevice {
   id: string;
   ip: string;
   name: string;
-  type: 'server' | 'workstation' | 'router' | 'firewall';
+  mac: string;
+  type: 'server' | 'workstation' | 'router' | 'firewall' | 'computer' | 'mobile';
   status: 'online' | 'offline' | 'warning';
   risk: 'high' | 'medium' | 'low';
   lastSeen: string;
@@ -36,6 +37,7 @@ export const fetchNetworkDevices = createAsyncThunk(
         id: '1',
         ip: '192.168.1.1',
         name: 'Main Router',
+        mac: '00:1B:44:11:3A:B7',
         type: 'router',
         status: 'online',
         risk: 'low',
@@ -46,6 +48,7 @@ export const fetchNetworkDevices = createAsyncThunk(
         id: '2',
         ip: '192.168.1.10',
         name: 'Web Server',
+        mac: '00:1B:44:22:3A:C8',
         type: 'server',
         status: 'online',
         risk: 'medium',
@@ -56,6 +59,7 @@ export const fetchNetworkDevices = createAsyncThunk(
         id: '3',
         ip: '192.168.1.20',
         name: 'DB Server',
+        mac: '00:1B:44:33:3A:D9',
         type: 'server',
         status: 'warning',
         risk: 'high',
@@ -66,6 +70,7 @@ export const fetchNetworkDevices = createAsyncThunk(
         id: '4',
         ip: '192.168.1.100',
         name: 'Admin Workstation',
+        mac: '00:1B:44:44:3A:EA',
         type: 'workstation',
         status: 'online',
         risk: 'low',
