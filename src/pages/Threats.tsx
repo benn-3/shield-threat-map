@@ -7,7 +7,7 @@ import ThreatFilters from '../components/threats/ThreatFilters';
 import ThreatTable from '../components/threats/ThreatTable';
 import { Button } from '../components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
-import { flag, shield, x } from 'lucide-react';
+import { Flag, Shield, X } from 'lucide-react';
 
 const Threats = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -45,7 +45,7 @@ const Threats = () => {
             {loading ? 'Refreshing...' : 'Refresh Data'}
           </Button>
           <Button className="bg-red-600 hover:bg-red-700">
-            <shield className="w-4 h-4 mr-2" />
+            <Shield className="w-4 h-4 mr-2" />
             Block Selected
           </Button>
         </div>
@@ -59,7 +59,7 @@ const Threats = () => {
               <p className="text-slate-400 text-sm">Total Threats</p>
               <p className="text-white text-2xl font-bold">{threats.length}</p>
             </div>
-            <flag className="w-8 h-8 text-red-500" />
+            <Flag className="w-8 h-8 text-red-500" />
           </div>
         </div>
         
@@ -117,7 +117,7 @@ const Threats = () => {
                 size="sm"
                 onClick={() => setSelectedThreat(null)}
               >
-                <x className="w-4 h-4" />
+                <X className="w-4 h-4" />
               </Button>
             </DialogTitle>
           </DialogHeader>
