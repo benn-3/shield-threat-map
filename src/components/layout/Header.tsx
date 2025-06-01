@@ -4,13 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { toggleSidebar, toggleTheme } from '../../store/slices/uiSlice';
 import { logout } from '../../store/slices/authSlice';
-import { Bell, Search, Settings, User } from 'lucide-react';
+import { Bell, Search, Settings, User, LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
 
 const Header = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
   const { theme, sidebarCollapsed } = useSelector((state: RootState) => state.ui);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <header className="bg-slate-900 border-b border-slate-700 px-6 py-4 flex items-center justify-between">
@@ -63,6 +67,16 @@ const Header = () => {
           </div>
           <span className="text-sm">{user?.email}</span>
         </div>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleLogout}
+          className="text-slate-400 hover:text-red-400"
+          title="Logout"
+        >
+          <LogOut className="w-5 h-5" />
+        </Button>
       </div>
     </header>
   );
