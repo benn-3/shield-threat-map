@@ -41,6 +41,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
       
       if (response.success && response.user) {
         dispatch(login({
+          id: response.user.id,
           email: response.user.email,
           role: response.user.role,
         }));

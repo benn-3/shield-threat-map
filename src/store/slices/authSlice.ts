@@ -1,6 +1,7 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { authApi } from '../../services/authApi';
+import { supabase } from '../../lib/supabase';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -16,7 +17,7 @@ interface AuthState {
 const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
-  loading: false,
+  loading: true, // Start with loading true to check auth state
   error: null
 };
 
@@ -36,23 +37,24 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<{ email: string; role: string }>) => {
+    login: (state, action: PayloadAction<{ id: string; email: string; role: string }>) => {
       state.isAuthenticated = true;
-      state.user = {
-        id: '1', // This will come from your MongoDB backend
-        email: action.payload.email,
-        role: action.payload.role
-      };
+      state.user = action.payload;
       state.error = null;
+      state.loading = false;
     },
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = null;
       state.error = null;
+      state.loading = false;
       authApi.logout();
     },
     clearError: (state) => {
       state.error = null;
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -75,5 +77,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout, clearError } = authSlice.actions;
+export const { login, logout, clearError, setLoading } = authSlice.actions;
 export default authSlice.reducer;

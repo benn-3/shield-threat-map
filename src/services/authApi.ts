@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+import { supabase } from '../lib/supabase';
 
 export interface LoginCredentials {
   email: string;
@@ -26,21 +27,35 @@ export interface AuthResponse {
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: credentials.email,
+        password: credentials.password,
       });
 
-      const data = await response.json();
-      
-      if (data.token) {
-        localStorage.setItem('authToken', data.token);
+      if (error) {
+        return {
+          success: false,
+          message: error.message,
+        };
       }
-      
-      return data;
+
+      if (data.user) {
+        return {
+          success: true,
+          message: 'Login successful',
+          user: {
+            id: data.user.id,
+            email: data.user.email || '',
+            role: data.user.user_metadata?.role || 'Security Analyst',
+          },
+          token: data.session?.access_token,
+        };
+      }
+
+      return {
+        success: false,
+        message: 'Login failed',
+      };
     } catch (error) {
       console.error('Login error:', error);
       return {
@@ -52,21 +67,40 @@ export const authApi = {
 
   signup: async (credentials: SignupCredentials): Promise<AuthResponse> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const { data, error } = await supabase.auth.signUp({
+        email: credentials.email,
+        password: credentials.password,
+        options: {
+          data: {
+            role: credentials.role || 'Security Analyst',
+          },
         },
-        body: JSON.stringify(credentials),
       });
 
-      const data = await response.json();
-      
-      if (data.token) {
-        localStorage.setItem('authToken', data.token);
+      if (error) {
+        return {
+          success: false,
+          message: error.message,
+        };
       }
-      
-      return data;
+
+      if (data.user) {
+        return {
+          success: true,
+          message: 'Account created successfully',
+          user: {
+            id: data.user.id,
+            email: data.user.email || '',
+            role: data.user.user_metadata?.role || 'Security Analyst',
+          },
+          token: data.session?.access_token,
+        };
+      }
+
+      return {
+        success: false,
+        message: 'Signup failed',
+      };
     } catch (error) {
       console.error('Signup error:', error);
       return {
@@ -77,35 +111,35 @@ export const authApi = {
   },
 
   logout: async (): Promise<void> => {
-    localStorage.removeItem('authToken');
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   },
 
   checkAuth: async (): Promise<AuthResponse> => {
-    const token = localStorage.getItem('authToken');
-    
-    if (!token) {
-      return { success: false, message: 'No token found' };
-    }
-
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/verify`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const { data: { user }, error } = await supabase.auth.getUser();
 
-      const data = await response.json();
-      
-      if (!data.success) {
-        localStorage.removeItem('authToken');
+      if (error || !user) {
+        return { 
+          success: false, 
+          message: 'No authenticated user' 
+        };
       }
-      
-      return data;
+
+      return {
+        success: true,
+        message: 'User authenticated',
+        user: {
+          id: user.id,
+          email: user.email || '',
+          role: user.user_metadata?.role || 'Security Analyst',
+        },
+      };
     } catch (error) {
       console.error('Auth check error:', error);
-      localStorage.removeItem('authToken');
       return {
         success: false,
         message: 'Authentication check failed',
