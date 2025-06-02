@@ -1,7 +1,5 @@
-
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { authApi } from '../../services/authApi';
-import { supabase } from '../../lib/supabase';
 
 interface AuthState {
   isAuthenticated: boolean;
