@@ -1,5 +1,6 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { apiClient } from '../../services/apiClient';
 
 export interface NetworkDevice {
   id: string;
@@ -30,56 +31,63 @@ const initialState: NetworkState = {
 export const fetchNetworkDevices = createAsyncThunk(
   'network/fetchDevices',
   async () => {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    const mockDevices: NetworkDevice[] = [
-      {
-        id: '1',
-        ip: '192.168.1.1',
-        name: 'Main Router',
-        mac: '00:1B:44:11:3A:B7',
-        type: 'router',
-        status: 'online',
-        risk: 'low',
-        lastSeen: new Date().toISOString(),
-        connections: ['2', '3', '4']
-      },
-      {
-        id: '2',
-        ip: '192.168.1.10',
-        name: 'Web Server',
-        mac: '00:1B:44:22:3A:C8',
-        type: 'server',
-        status: 'online',
-        risk: 'medium',
-        lastSeen: new Date().toISOString(),
-        connections: ['1']
-      },
-      {
-        id: '3',
-        ip: '192.168.1.20',
-        name: 'DB Server',
-        mac: '00:1B:44:33:3A:D9',
-        type: 'server',
-        status: 'warning',
-        risk: 'high',
-        lastSeen: new Date(Date.now() - 300000).toISOString(),
-        connections: ['1']
-      },
-      {
-        id: '4',
-        ip: '192.168.1.100',
-        name: 'Admin Workstation',
-        mac: '00:1B:44:44:3A:EA',
-        type: 'workstation',
-        status: 'online',
-        risk: 'low',
-        lastSeen: new Date().toISOString(),
-        connections: ['1']
-      }
-    ];
-    
-    return mockDevices;
+    try {
+      const data = await apiClient.get('/network/devices');
+      return data.devices || data; // Handle different response structures
+    } catch (error) {
+      // Fallback to mock data if backend is not available
+      console.warn('Backend not available, using mock data');
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const mockDevices: NetworkDevice[] = [
+        {
+          id: '1',
+          ip: '192.168.1.1',
+          name: 'Main Router',
+          mac: '00:1B:44:11:3A:B7',
+          type: 'router',
+          status: 'online',
+          risk: 'low',
+          lastSeen: new Date().toISOString(),
+          connections: ['2', '3', '4']
+        },
+        {
+          id: '2',
+          ip: '192.168.1.10',
+          name: 'Web Server',
+          mac: '00:1B:44:22:3A:C8',
+          type: 'server',
+          status: 'online',
+          risk: 'medium',
+          lastSeen: new Date().toISOString(),
+          connections: ['1']
+        },
+        {
+          id: '3',
+          ip: '192.168.1.20',
+          name: 'DB Server',
+          mac: '00:1B:44:33:3A:D9',
+          type: 'server',
+          status: 'warning',
+          risk: 'high',
+          lastSeen: new Date(Date.now() - 300000).toISOString(),
+          connections: ['1']
+        },
+        {
+          id: '4',
+          ip: '192.168.1.100',
+          name: 'Admin Workstation',
+          mac: '00:1B:44:44:3A:EA',
+          type: 'workstation',
+          status: 'online',
+          risk: 'low',
+          lastSeen: new Date().toISOString(),
+          connections: ['1']
+        }
+      ];
+      
+      return mockDevices;
+    }
   }
 );
 
