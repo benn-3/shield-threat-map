@@ -4,6 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+let supabaseClient;
+
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Supabase environment variables missing:', {
     VITE_SUPABASE_URL: !!supabaseUrl,
@@ -11,10 +13,12 @@ if (!supabaseUrl || !supabaseAnonKey) {
   });
   
   // Provide a fallback that won't crash the app
-  export const supabase = createClient(
+  supabaseClient = createClient(
     'https://placeholder.supabase.co', 
     'placeholder-key'
   );
 } else {
-  export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 }
+
+export const supabase = supabaseClient;
