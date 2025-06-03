@@ -22,8 +22,8 @@ export interface AuthResponse {
   token?: string;
 }
 
-// You'll need to replace this with your actual backend URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// Use Vite environment variables instead of process.env
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
